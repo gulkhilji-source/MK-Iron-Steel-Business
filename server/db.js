@@ -44,7 +44,6 @@ db.exec(`
 
 
 const count = db.prepare('SELECT COUNT(*) n FROM admins').get().n;
-const count = db.prepare('SELECT COUNT(*) n FROM admins').get().n;
 
 if (!count) {
   const name = process.env.ADMIN_NAME;
