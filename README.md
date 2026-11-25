@@ -22,8 +22,8 @@ A full-stack JavaScript starter app for Mujahid Khilji (Iron & Steel Fabrication
 7. Open **http://localhost:5173**.
 
 Default first-run login (change it in `.env` before the first launch):
-- Email: `admin@mk.local`
-- Password: `ChangeMe123!`
+- Email: ``
+- Password: ``
 
 The first admin is seeded automatically the first time the database is created. The SQLite database is stored at `server/data/mk-business.sqlite`; uploaded bill files are stored in `server/uploads/`. Back up both folders.
 

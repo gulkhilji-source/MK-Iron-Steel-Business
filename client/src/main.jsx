@@ -243,8 +243,8 @@ function App(){
 }
 
 function Login({onLogin}){
-  const[email,setEmail]=useState('admin@mk.local');
-  const[password,setPassword]=useState('ChangeMe123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const[busy,setBusy]=useState(false);
   const[err,setErr]=useState('');
 
@@ -270,13 +270,32 @@ function Login({onLogin}){
           <p>Sign in to manage your business accounts, orders and ledgers.</p>
         </div>
         <form onSubmit={submit}>
-          <label>Email address</label>
-          <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required/>
-          <label>Password</label>
-          <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required/>
-          {err&&<p className="error">{err}</p>}
-          <button className="primary full" disabled={busy}>{busy?'Signing in…':'Sign in to workspace'}</button>
-        </form>
+  <label>Email address</label>
+  <input
+    type="email"
+    value={email}
+    onChange={e => setEmail(e.target.value)}
+    placeholder="Enter your admin email"
+    autoComplete="username"
+    required
+  />
+
+  <label>Password</label>
+  <input
+    type="password"
+    value={password}
+    onChange={e => setPassword(e.target.value)}
+    placeholder="Enter your password"
+    autoComplete="current-password"
+    required
+  />
+
+  {err && <p className="error">{err}</p>}
+
+  <button className="primary full" disabled={busy}>
+    {busy ? 'Signing in…' : 'Sign in to workspace'}
+  </button>
+</form>
         <div className="login-foot">Secure local business workspace · MK</div>
       </div>
     </div>

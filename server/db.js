@@ -44,32 +44,24 @@ db.exec(`
 
 
 const count = db.prepare('SELECT COUNT(*) n FROM admins').get().n;
-if (!count) {
-  const name=process.env.ADMIN_NAME||'Mujahid Khilji', email=process.env.ADMIN_EMAIL||'admin@mk.local', pass=process.env.ADMIN_PASSWORD||'ChangeMe123!';
-  db.prepare('INSERT INTO admins(name,email,password_hash) VALUES(?,?,?)').run(name,email,bcrypt.hashSync(pass,10));
-}
-// TEMPORARY: Reset an existing admin account once
-if (process.env.RESET_ADMIN_CREDENTIALS === 'true') {
-  const oldEmail = process.env.ADMIN_OLD_EMAIL;
-  const newName = process.env.ADMIN_NAME;
-  const newEmail = process.env.ADMIN_EMAIL;
-  const newPassword = process.env.ADMIN_PASSWORD;
+const count = db.prepare('SELECT COUNT(*) n FROM admins').get().n;
 
-  if (!oldEmail || !newName || !newEmail || !newPassword) {
-    throw new Error('Missing admin reset environment variables');
+if (!count) {
+  const name = process.env.ADMIN_NAME;
+  const email = process.env.ADMIN_EMAIL;
+  const pass = process.env.ADMIN_PASSWORD;
+
+  if (!name || !email || !pass) {
+    throw new Error(
+      'No admin exists. Set ADMIN_NAME, ADMIN_EMAIL and ADMIN_PASSWORD in environment variables.'
+    );
   }
 
-  const result = db.prepare(`
-    UPDATE admins
-    SET name = ?, email = ?, password_hash = ?
-    WHERE email = ?
-  `).run(newName, newEmail, bcrypt.hashSync(newPassword, 10), oldEmail);
+  db.prepare(
+    'INSERT INTO admins(name, email, password_hash) VALUES(?,?,?)'
+  ).run(name, email, bcrypt.hashSync(pass, 10));
 
-  console.log(
-    result.changes
-      ? 'Admin credentials updated successfully.'
-      : 'Admin reset failed: old email was not found.'
-  );
+  console.log('Initial admin account created.');
 }
 
 export default db;
