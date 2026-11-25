@@ -10,7 +10,7 @@ node_modules/
 .env
 .env.*
 !.env.example
-
+server/data/
 server/*.sqlite
 server/backups/
 server/uploads/
