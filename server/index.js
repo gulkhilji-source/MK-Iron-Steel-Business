@@ -8,7 +8,13 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db from './db.js';
 
-const app=express(), PORT=process.env.PORT||4000, SECRET=process.env.JWT_SECRET||'dev-only-change-me';
+const app = express();
+const PORT = process.env.PORT || 4000;
+const SECRET = process.env.JWT_SECRET;
+
+if (!SECRET) {
+  throw new Error('JWT_SECRET must be configured in environment variables.');
+}
 app.use(cors()); app.use(express.json({limit:'8mb'}));
 const uploadDir=path.resolve('server/uploads'); fs.mkdirSync(uploadDir,{recursive:true});
 app.use('/uploads',express.static(uploadDir));
