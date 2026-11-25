@@ -48,4 +48,28 @@ if (!count) {
   const name=process.env.ADMIN_NAME||'Mujahid Khilji', email=process.env.ADMIN_EMAIL||'admin@mk.local', pass=process.env.ADMIN_PASSWORD||'ChangeMe123!';
   db.prepare('INSERT INTO admins(name,email,password_hash) VALUES(?,?,?)').run(name,email,bcrypt.hashSync(pass,10));
 }
+// TEMPORARY: Reset an existing admin account once
+if (process.env.RESET_ADMIN_CREDENTIALS === 'true') {
+  const oldEmail = process.env.ADMIN_OLD_EMAIL;
+  const newName = process.env.ADMIN_NAME;
+  const newEmail = process.env.ADMIN_EMAIL;
+  const newPassword = process.env.ADMIN_PASSWORD;
+
+  if (!oldEmail || !newName || !newEmail || !newPassword) {
+    throw new Error('Missing admin reset environment variables');
+  }
+
+  const result = db.prepare(`
+    UPDATE admins
+    SET name = ?, email = ?, password_hash = ?
+    WHERE email = ?
+  `).run(newName, newEmail, bcrypt.hashSync(newPassword, 10), oldEmail);
+
+  console.log(
+    result.changes
+      ? 'Admin credentials updated successfully.'
+      : 'Admin reset failed: old email was not found.'
+  );
+}
+
 export default db;
